@@ -15,7 +15,7 @@ export function EncouragementCard({ steps, goal, headline }: Props) {
   return (
     <motion.div
       layout
-      className="relative rounded-3xl bg-ink-800/70 border border-ink-700/60 p-4 pl-5 overflow-hidden bg-[#0B1122]"
+      className="relative rounded-3xl bg-[#0B1122] border border-ink-700/60 p-4 pl-5 overflow-hidden"
     >
       <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-lime-400 shadow-glow-lime-soft" />
       <div className="flex gap-3 items-start">

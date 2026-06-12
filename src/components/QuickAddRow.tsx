@@ -97,7 +97,7 @@ function PresetTile({
       whileTap={{ scale: 0.96 }}
       onClick={onClick}
       aria-label={`Add ${amount} steps`}
-      className="h-16 rounded-sm bg-ink-800/70 border border-ink-700/60 flex flex-col items-center justify-center gap-0.5 text-ice-100 hover:border-lime-400/40 transition-colors bg-[#0B1122]"
+      className="h-16 rounded-sm bg-[#0B1122] border border-ink-700/60 flex flex-col items-center justify-center gap-0.5 text-ice-100 hover:border-lime-400/40 transition-colors"
     >
       <Plus className="size-4" strokeWidth={2} />
       <span className="text-sm font-bold tabular-nums">{fmt(amount)}</span>
