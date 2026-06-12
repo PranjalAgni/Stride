@@ -150,7 +150,7 @@ export default function History() {
             </div>
             <div className="mt-4 flex justify-center gap-5 text-xs text-ink-300">
               <Legend variant="solid" color="bg-lime-400" label="Goal Met" />
-              <Legend variant="solid" color="bg-ink-700" label="Rest Day" />
+              <Legend variant="solid" color="bg-ink-700 border border-ink-500/40" label="Rest Day" />
               <Legend variant="dashed" label="Upcoming" />
             </div>
           </div>
@@ -338,11 +338,13 @@ function DayPill({ isToday, isFuture, met, beforeStart }: DayPillProps) {
     );
   }
 
-  // Past day: not met (or before challenge start). Solid dim pill.
+  // Past day: not met (or before challenge start). Solid pill, distinct from card bg.
   return (
     <div
-      className={`size-10 mx-auto rounded-full ${
-        beforeStart ? 'bg-ink-800/60' : 'bg-ink-700/70'
+      className={`size-10 mx-auto rounded-full border ${
+        beforeStart
+          ? 'bg-ink-900/80 border-ink-700/60'
+          : 'bg-ink-700 border-ink-500/40'
       }`}
     />
   );

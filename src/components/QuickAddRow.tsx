@@ -23,7 +23,7 @@ export function QuickAddRow({ onAdd, onSetSteps }: Props) {
       <div className="text-xs font-bold tracking-[0.2em] text-ink-300 mb-3">
         QUICK LOG
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3 bg-[#0B1122]">
         <PresetTile amount={500} onClick={() => onAdd(500)} />
         <PresetTile amount={1000} onClick={() => onAdd(1000)} />
         <motion.button
