@@ -7,7 +7,20 @@ import { progressLabel } from '../lib/badges';
 import type { BadgeDef, BadgeStatus, BadgeTier } from '../lib/badges';
 import { fromISO } from '../lib/dates';
 
-const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const MONTHS_SHORT = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+];
 
 function formatEarned(iso: string): string {
   const d = fromISO(iso);
@@ -15,23 +28,23 @@ function formatEarned(iso: string): string {
 }
 
 const TIER_COLOR: Record<BadgeTier, string> = {
-  bronze:   'text-amber-400',
-  silver:   'text-ink-100',
-  gold:     'text-lime-400',
+  bronze: 'text-amber-400',
+  silver: 'text-ink-100',
+  gold: 'text-lime-400',
   platinum: 'text-ice-200',
 };
 
 const TIER_BORDER: Record<BadgeTier, string> = {
-  bronze:   'border-amber-400/40',
-  silver:   'border-ink-100/30',
-  gold:     'border-lime-400/40',
+  bronze: 'border-amber-400/40',
+  silver: 'border-ink-100/30',
+  gold: 'border-lime-400/40',
   platinum: 'border-ice-200/40',
 };
 
 const TIER_NAME: Record<BadgeTier, string> = {
-  bronze:   'Bronze',
-  silver:   'Silver',
-  gold:     'Gold',
+  bronze: 'Bronze',
+  silver: 'Silver',
+  gold: 'Gold',
   platinum: 'Platinum',
 };
 
@@ -44,9 +57,10 @@ function iconFor(def: BadgeDef): LucideIcon {
 
 export default function Badges() {
   const { statuses, earned, unlockedCount, totalCount } = useBadgeUnlocks();
-  const pct = totalCount === 0 ? 0 : Math.round((unlockedCount / totalCount) * 100);
-  const unlocked = statuses.filter(s => s.unlocked);
-  const locked = statuses.filter(s => !s.unlocked);
+  const pct =
+    totalCount === 0 ? 0 : Math.round((unlockedCount / totalCount) * 100);
+  const unlocked = statuses.filter((s) => s.unlocked);
+  const locked = statuses.filter((s) => !s.unlocked);
 
   return (
     <div className="pb-6">
@@ -64,8 +78,12 @@ export default function Badges() {
         {/* Total unlocked summary */}
         <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4 flex items-center justify-between">
           <div>
-            <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">TOTAL UNLOCKED</div>
-            <div className="text-4xl font-extrabold tabular-nums text-ice-100 mt-1">{unlockedCount}</div>
+            <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">
+              TOTAL UNLOCKED
+            </div>
+            <div className="text-4xl font-extrabold tabular-nums text-ice-100 mt-1">
+              {unlockedCount}
+            </div>
           </div>
           <RingPct pct={pct} />
         </div>
@@ -80,7 +98,7 @@ export default function Badges() {
             <EmptyHint label="No badges yet — start logging steps to earn your first." />
           ) : (
             <div className="space-y-3">
-              {unlocked.map(s => (
+              {unlocked.map((s) => (
                 <UnlockedCard
                   key={s.def.id}
                   status={s}
@@ -101,12 +119,12 @@ export default function Badges() {
             <EmptyHint label="Every badge is unlocked. Absolute legend." />
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {locked.map(s => <LockedCard key={s.def.id} status={s} />)}
+              {locked.map((s) => (
+                <LockedCard key={s.def.id} status={s} />
+              ))}
             </div>
           )}
         </div>
-
-        <Banner />
       </div>
     </div>
   );
@@ -122,15 +140,27 @@ function RingPct({ pct }: { pct: number }) {
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size/2} cy={size/2} r={r} stroke="#1a1d24" fill="none" strokeWidth={stroke} />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke="#1a1d24"
+          fill="none"
+          strokeWidth={stroke}
+        />
         <motion.circle
-          cx={size/2} cy={size/2} r={r}
-          stroke="#d4ff3a" fill="none" strokeWidth={stroke} strokeLinecap="round"
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke="#d4ff3a"
+          fill="none"
+          strokeWidth={stroke}
+          strokeLinecap="round"
           strokeDasharray={c}
           initial={false}
           animate={{ strokeDashoffset: offset }}
           transition={{ type: 'spring', stiffness: 90, damping: 15 }}
-          transform={`rotate(-90 ${size/2} ${size/2})`}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>
       <div className="absolute inset-0 grid place-items-center text-xs font-extrabold text-ice-100">
@@ -140,7 +170,13 @@ function RingPct({ pct }: { pct: number }) {
   );
 }
 
-function UnlockedCard({ status, earnedISO }: { status: BadgeStatus; earnedISO?: string }) {
+function UnlockedCard({
+  status,
+  earnedISO,
+}: {
+  status: BadgeStatus;
+  earnedISO?: string;
+}) {
   const { def } = status;
   const Icon = iconFor(def);
   return (
@@ -149,12 +185,19 @@ function UnlockedCard({ status, earnedISO }: { status: BadgeStatus; earnedISO?: 
       animate={{ opacity: 1, y: 0 }}
       className={`relative rounded-2xl bg-ink-800/70 border p-4 flex items-start gap-3 ${TIER_BORDER[def.tier]}`}
     >
-      <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r bg-current opacity-70" style={{ color: 'currentColor' }} />
-      <div className={`size-12 rounded-xl border ${TIER_BORDER[def.tier]} bg-ink-900/60 grid place-items-center shrink-0 ${TIER_COLOR[def.tier]}`}>
+      <div
+        className="absolute left-0 top-3 bottom-3 w-1 rounded-r bg-current opacity-70"
+        style={{ color: 'currentColor' }}
+      />
+      <div
+        className={`size-12 rounded-xl border ${TIER_BORDER[def.tier]} bg-ink-900/60 grid place-items-center shrink-0 ${TIER_COLOR[def.tier]}`}
+      >
         <Icon className="size-6" strokeWidth={2} />
       </div>
       <div className="min-w-0 flex-1">
-        <div className={`text-base font-extrabold ${TIER_COLOR[def.tier]}`}>{def.label}</div>
+        <div className={`text-base font-extrabold ${TIER_COLOR[def.tier]}`}>
+          {def.label}
+        </div>
         <div className="text-sm text-ink-300 mt-0.5 leading-snug">
           {TIER_NAME[def.tier]} Achievement: {def.description}
         </div>
@@ -178,7 +221,9 @@ function LockedCard({ status }: { status: BadgeStatus }) {
         <Icon className="size-6" strokeWidth={2} />
       </div>
       <div className="text-sm font-extrabold text-ink-300">{def.label}</div>
-      <div className="text-[11px] text-ink-500 mt-1 leading-snug">{def.description}</div>
+      <div className="text-[11px] text-ink-500 mt-1 leading-snug">
+        {def.description}
+      </div>
       <div className="mt-3 w-full h-1 rounded-full bg-ink-700/60 overflow-hidden">
         <div
           className="h-full bg-ink-300/60 rounded-full"
@@ -196,22 +241,6 @@ function EmptyHint({ label }: { label: string }) {
   return (
     <div className="rounded-2xl bg-ink-800/40 border border-dashed border-ink-700/60 p-4 text-sm text-ink-300 text-center">
       {label}
-    </div>
-  );
-}
-
-function Banner() {
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-ink-700/60 bg-gradient-to-br from-ink-800 via-ink-900 to-ink-950 p-5 mt-2">
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-y-0 right-[-20%] w-1/2 bg-gradient-to-l from-lime-400/40 to-transparent blur-2xl" />
-      </div>
-      <div className="relative">
-        <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">KEEP MOVING</div>
-        <div className="mt-1 text-lg font-extrabold text-ice-100 leading-tight">
-          Elite performance requires<br/>elite consistency.
-        </div>
-      </div>
     </div>
   );
 }
