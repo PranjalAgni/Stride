@@ -15,14 +15,14 @@ import { pickEncouragement } from '../lib/messages';
 
 const HEADLINES: Record<string, string> = {
   early: "Let's get moving",
-  mid:   "Keep it up!",
-  late:  "Almost there!",
-  done:  "Goal smashed!",
+  mid: 'Keep it up!',
+  late: 'Almost there!',
+  done: 'Goal smashed!',
 };
 
 export default function Dashboard() {
   const today = todayISO();
-  const { entries, addSteps } = useEntries();
+  const { entries, addSteps, setSteps } = useEntries();
   const { settings } = useSettings();
   const streak = useStreak(today);
   const { vibrate } = useHaptics();
@@ -30,7 +30,10 @@ export default function Dashboard() {
   const stepsToday = entries[today] ?? 0;
   const progress = stepsToday / settings.goal;
 
-  const message = useMemo(() => pickEncouragement(progress, today), [progress, today]);
+  const message = useMemo(
+    () => pickEncouragement(progress, today),
+    [progress, today],
+  );
   const headline = HEADLINES[message.band];
 
   const activeMinutes = Math.round(stepsToday / 100);
@@ -41,10 +44,9 @@ export default function Dashboard() {
     return sum;
   }, [entries, today]);
 
-  const [celebrated, setCelebrated] = useLocalStorage<{ celebratedDates: string[] }>(
-    'dailysteps:meta',
-    { celebratedDates: [] },
-  );
+  const [celebrated, setCelebrated] = useLocalStorage<{
+    celebratedDates: string[];
+  }>('dailysteps:meta', { celebratedDates: [] });
 
   const [fire, setFire] = useState(false);
   const wasBelow = useRef(stepsToday < settings.goal);
@@ -53,7 +55,9 @@ export default function Dashboard() {
     const alreadyCelebrated = celebrated.celebratedDates.includes(today);
     if (isAtOrAbove && wasBelow.current && !alreadyCelebrated) {
       setFire(true);
-      setCelebrated({ celebratedDates: [...celebrated.celebratedDates, today] });
+      setCelebrated({
+        celebratedDates: [...celebrated.celebratedDates, today],
+      });
       setTimeout(() => setFire(false), 1200);
     }
     wasBelow.current = !isAtOrAbove;
@@ -64,19 +68,32 @@ export default function Dashboard() {
     vibrate(10);
   };
 
+  const onSetSteps = (n: number) => {
+    setSteps(today, n);
+    vibrate(10);
+  };
+
   return (
     <div className="pb-6">
       <Header />
       <CelebrationBurst fire={fire} />
 
       <div className="flex justify-center pt-4 pb-6">
-        <ProgressRing steps={stepsToday} goal={settings.goal} streak={streak.current} />
+        <ProgressRing
+          steps={stepsToday}
+          goal={settings.goal}
+          streak={streak.current}
+        />
       </div>
 
       <div className="px-5 space-y-5">
-        <QuickAddRow onAdd={onAdd} />
+        <QuickAddRow onAdd={onAdd} onSetSteps={onSetSteps} />
 
-        <EncouragementCard steps={stepsToday} goal={settings.goal} headline={headline} />
+        <EncouragementCard
+          steps={stepsToday}
+          goal={settings.goal}
+          headline={headline}
+        />
 
         <StatTiles
           activeMinutes={activeMinutes}

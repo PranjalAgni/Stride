@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { todayISO, toISO, fromISO, daysBetween, addDays, monthGrid } from './dates';
+import { todayISO, toISO, fromISO, daysBetween, addDays, monthGrid, weekStartingMonday } from './dates';
 
 describe('dates', () => {
   it('todayISO returns YYYY-MM-DD format', () => {
@@ -27,6 +27,20 @@ describe('dates', () => {
     expect(addDays('2026-06-12', 1)).toBe('2026-06-13');
     expect(addDays('2026-06-12', -2)).toBe('2026-06-10');
     expect(addDays('2026-01-31', 1)).toBe('2026-02-01');
+  });
+
+  it('weekStartingMonday returns 7 ISO strings, Monday-Sunday', () => {
+    // 2026-06-12 is a Friday; Monday of that week is 2026-06-08, Sunday 2026-06-14
+    const w = weekStartingMonday('2026-06-12');
+    expect(w).toEqual([
+      '2026-06-08','2026-06-09','2026-06-10','2026-06-11','2026-06-12','2026-06-13','2026-06-14',
+    ]);
+  });
+
+  it('weekStartingMonday on a Monday returns same date as first', () => {
+    const w = weekStartingMonday('2026-06-08'); // Monday
+    expect(w[0]).toBe('2026-06-08');
+    expect(w).toHaveLength(7);
   });
 
   it('monthGrid returns 6 weeks x 7 days for a month, with iso + inMonth', () => {

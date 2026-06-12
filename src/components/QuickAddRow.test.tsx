@@ -5,7 +5,7 @@ import { QuickAddRow } from './QuickAddRow';
 
 describe('QuickAddRow', () => {
   it('renders the preset and custom buttons', () => {
-    render(<QuickAddRow onAdd={() => {}} />);
+    render(<QuickAddRow onAdd={() => {}} onSetSteps={() => {}} />);
     expect(screen.getByRole('button', { name: 'Add 500 steps' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add 1000 steps' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Custom amount' })).toBeInTheDocument();
@@ -13,18 +13,18 @@ describe('QuickAddRow', () => {
 
   it('calls onAdd with preset value when tapped', async () => {
     const onAdd = vi.fn();
-    render(<QuickAddRow onAdd={onAdd} />);
+    render(<QuickAddRow onAdd={onAdd} onSetSteps={() => {}} />);
     await userEvent.click(screen.getByRole('button', { name: 'Add 500 steps' }));
     expect(onAdd).toHaveBeenCalledWith(500);
   });
 
-  it('opens custom input and submits', async () => {
-    const onAdd = vi.fn();
-    render(<QuickAddRow onAdd={onAdd} />);
+  it('opens custom input and submits via onSetSteps', async () => {
+    const onSetSteps = vi.fn();
+    render(<QuickAddRow onAdd={() => {}} onSetSteps={onSetSteps} />);
     await userEvent.click(screen.getByRole('button', { name: 'Custom amount' }));
     const input = screen.getByPlaceholderText('Enter steps');
     await userEvent.type(input, '750');
     await userEvent.click(screen.getByRole('button', { name: 'Add custom' }));
-    expect(onAdd).toHaveBeenCalledWith(750);
+    expect(onSetSteps).toHaveBeenCalledWith(750);
   });
 });

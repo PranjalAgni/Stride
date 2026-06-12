@@ -20,6 +20,11 @@ export function addDays(iso: string, n: number): string {
   return toISO(dfAddDays(fromISO(iso), n));
 }
 
+export function weekStartingMonday(iso: string): string[] {
+  const start = startOfWeek(fromISO(iso), { weekStartsOn: 1 });
+  return Array.from({ length: 7 }, (_, i) => toISO(dfAddDays(start, i)));
+}
+
 export type MonthCell = { iso: string; inMonth: boolean };
 
 export function monthGrid(year: number, monthIndex0: number): MonthCell[] {
