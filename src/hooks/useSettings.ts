@@ -6,16 +6,26 @@ export type Settings = {
   goal: number;
   startDate: string;
   theme: 'light' | 'dark' | 'system';
+  name: string;
+  notifications: boolean;
 };
 
 const KEY = 'dailysteps:settings';
 
 export function defaultSettings(): Settings {
-  return { goal: 7500, startDate: todayISO(), theme: 'dark' };
+  return {
+    goal: 7500,
+    startDate: todayISO(),
+    theme: 'dark',
+    name: 'Friend',
+    notifications: false,
+  };
 }
 
 export function useSettings() {
-  const [settings, setSettings] = useLocalStorage<Settings>(KEY, defaultSettings());
+  const [stored, setSettings] = useLocalStorage<Partial<Settings>>(KEY, defaultSettings());
+  // Merge with defaults so older saved settings without new fields still work.
+  const settings: Settings = { ...defaultSettings(), ...stored };
   const update = useCallback(
     (patch: Partial<Settings>) => setSettings(prev => ({ ...prev, ...patch })),
     [setSettings],

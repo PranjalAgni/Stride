@@ -12,6 +12,7 @@ import { useHaptics } from '../hooks/useHaptics';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { addDays, todayISO } from '../lib/dates';
 import { pickEncouragement } from '../lib/messages';
+import { LOCALSTORAGE_KEY } from '../utils/constants';
 
 const HEADLINES: Record<string, string> = {
   early: "Let's get moving",
@@ -36,7 +37,8 @@ export default function Dashboard() {
   );
   const headline = HEADLINES[message.band];
 
-  const activeMinutes = Math.round(stepsToday / 100);
+  // closer to fitbit's estimate of 130 steps/minute of active walking
+  const activeMinutes = Math.round(stepsToday / 130);
   const weekGoal = settings.goal * 7;
   const weekSteps = useMemo(() => {
     let sum = 0;
@@ -46,7 +48,7 @@ export default function Dashboard() {
 
   const [celebrated, setCelebrated] = useLocalStorage<{
     celebratedDates: string[];
-  }>('dailysteps:meta', { celebratedDates: [] });
+  }>(LOCALSTORAGE_KEY, { celebratedDates: [] });
 
   const [fire, setFire] = useState(false);
   const wasBelow = useRef(stepsToday < settings.goal);

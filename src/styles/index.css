@@ -20,3 +20,34 @@
     font-feature-settings: 'cv11', 'ss01';
   }
 }
+
+@layer components {
+  .goal-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: #1a1d24;
+    border-radius: 9999px;
+    outline: none;
+  }
+  .goal-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: #8fc8ff;
+    box-shadow: 0 0 12px rgba(143, 200, 255, 0.7);
+    cursor: pointer;
+    border: 2px solid #08090c;
+  }
+  .goal-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: #8fc8ff;
+    box-shadow: 0 0 12px rgba(143, 200, 255, 0.7);
+    cursor: pointer;
+    border: 2px solid #08090c;
+  }
+}
