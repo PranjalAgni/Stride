@@ -11,7 +11,7 @@ type Earned = Record<string, string>;  // badge id -> ISO earned date
 
 export function useBadgeUnlocks() {
   const { entries } = useEntries();
-  const streak = useStreak();
+  const streak = useStreak(entries);
   const [earned, setEarned] = useLocalStorage<Earned>(KEY, {});
 
   const stats: BadgeStats = useMemo(() => {

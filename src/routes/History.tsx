@@ -49,7 +49,7 @@ export default function History() {
   const today = todayISO();
   const { entries } = useEntries();
   const { settings } = useSettings();
-  const streak = useStreak(today);
+  const streak = useStreak(entries, today);
 
   const weekIsos = useMemo(() => weekStartingMonday(today), [today]);
   const weekTotal = useMemo(

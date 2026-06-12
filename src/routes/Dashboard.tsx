@@ -25,7 +25,7 @@ export default function Dashboard() {
   const today = todayISO();
   const { entries, addSteps, setSteps } = useEntries();
   const { settings } = useSettings();
-  const streak = useStreak(today);
+  const streak = useStreak(entries, today);
   const { vibrate } = useHaptics();
 
   const stepsToday = entries[today] ?? 0;

@@ -16,7 +16,7 @@ describe('useStreak', () => {
     act(() => entries.current.setSteps('2026-06-10', 7500));
     act(() => entries.current.setSteps('2026-06-11', 7500));
 
-    const { result: streak } = renderHook(() => useStreak(today));
+    const { result: streak } = renderHook(() => useStreak(entries.current.entries, today));
     expect(streak.current.current).toBe(2);
     expect(streak.current.dayOfChallenge).toBe(12);
   });
