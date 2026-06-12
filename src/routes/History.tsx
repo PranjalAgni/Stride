@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Footprints, ArrowRight } from 'lucide-react';
+import { Zap, Footprints, ArrowRight, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
+import { ShareSheet } from '../components/ShareSheet';
 import { useEntries } from '../hooks/useEntries';
 import { useSettings } from '../hooks/useSettings';
 import { useStreak } from '../hooks/useStreak';
@@ -52,6 +53,7 @@ export default function History() {
   const { entries } = useEntries();
   const { settings } = useSettings();
   const streak = useStreak(entries, today);
+  const [shareIso, setShareIso] = useState<string | null>(null);
 
   const weekIsos = useMemo(() => weekStartingMonday(today), [today]);
   const weekTotal = useMemo(
@@ -174,6 +176,8 @@ export default function History() {
                 ? Math.round((steps / settings.goal - 1) * 100)
                 : 0;
 
+              const shareable = !beforeStart && logged;
+
               return (
                 <motion.div
                   key={iso}
@@ -238,12 +242,30 @@ export default function History() {
                       </>
                     )}
                   </div>
+                  {shareable && (
+                    <button
+                      type="button"
+                      onClick={() => setShareIso(iso)}
+                      aria-label={`Share ${dayLabel(iso, today)}`}
+                      className="size-9 rounded-full bg-ink-900/60 border border-ink-700/60 grid place-items-center text-ice-100 hover:bg-ink-800 hover:text-lime-400 transition-colors shrink-0"
+                    >
+                      <Share2 className="size-4" strokeWidth={2.25} />
+                    </button>
+                  )}
                 </motion.div>
               );
             })}
           </div>
         </Section>
       </div>
+
+      <ShareSheet
+        open={shareIso !== null}
+        onClose={() => setShareIso(null)}
+        iso={shareIso ?? today}
+        steps={shareIso ? entries[shareIso] ?? 0 : 0}
+        goal={settings.goal}
+      />
     </div>
   );
 }
