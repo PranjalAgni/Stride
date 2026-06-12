@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Dashboard from './routes/Dashboard';
 import History from './routes/History';
+import Calendar from './routes/Calendar';
 import Badges from './routes/Badges';
 import Settings from './routes/Settings';
 import { BottomTabs } from './components/BottomTabs';
@@ -21,6 +22,7 @@ function AnimatedRoutes() {
         <Routes location={location}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/history" element={<History />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="/badges" element={<Badges />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

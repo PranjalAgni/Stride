@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Footprints, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { useEntries } from '../hooks/useEntries';
 import { useSettings } from '../hooks/useSettings';
@@ -46,6 +47,7 @@ function dayLabel(iso: string, today: string): string {
 }
 
 export default function History() {
+  const navigate = useNavigate();
   const today = todayISO();
   const { entries } = useEntries();
   const { settings } = useSettings();
@@ -109,6 +111,7 @@ export default function History() {
           right={
             <button
               type="button"
+              onClick={() => navigate('/calendar')}
               className="inline-flex items-center gap-1 text-sm font-bold text-ice-100 hover:text-lime-400 transition-colors"
             >
               Full Calendar <ArrowRight className="size-4" />
