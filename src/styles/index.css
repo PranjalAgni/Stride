@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-gradient-to-b from-mint-50 via-lavender-50 to-peach-50 text-ink-900;
+    @apply dark:from-ink-950 dark:via-ink-900 dark:to-ink-950 dark:text-ink-50;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+  }
+}
