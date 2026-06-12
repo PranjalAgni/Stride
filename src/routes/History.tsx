@@ -345,11 +345,17 @@ function DayPill({ isToday, isFuture, met, beforeStart }: DayPillProps) {
   // Past day: not met (or before challenge start). Solid pill, distinct from card bg.
   return (
     <div
-      className={`size-10 mx-auto rounded-full border ${
+      className={`size-10 mx-auto rounded-full border grid place-items-center ${
         beforeStart
           ? 'bg-ink-900/80 border-ink-700/60'
           : 'bg-ink-700 border-ink-500/40'
       }`}
-    />
+    >
+      <span
+        className={`size-1.5 rounded-full ${
+          beforeStart ? 'bg-ink-500/70' : 'bg-green-500/70'
+        }`}
+      />
+    </div>
   );
 }
