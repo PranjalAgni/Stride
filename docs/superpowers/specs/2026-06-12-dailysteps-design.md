@@ -69,7 +69,7 @@ Strict: the streak counts consecutive days, ending today (or yesterday if today'
 
 - Days before `settings.startDate` do not count toward streak in either direction.
 - "Day N of the challenge" = `daysBetween(startDate, today) + 1`.
-- Today not yet at goal does NOT break the streak; it just means the streak as of yesterday still applies. The streak only breaks once a past day is final and below goal.
+- Today not yet at goal does NOT break the streak; it just means the streak as of yesterday still applies. A day becomes "final" at local midnight — the streak breaks the moment a new day starts and the prior day's entry is below goal.
 
 ## Motivation System
 
