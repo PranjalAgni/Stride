@@ -67,7 +67,7 @@ export default function History() {
 
       <div className="px-5 pt-5 space-y-5">
         <Section label="STREAK STATS">
-          <div className="rounded-2xl border border-lime-400/30 bg-lime-400/[0.03] p-4 shadow-glow-lime-soft">
+          <div className="rounded-2xl border border-lime-400/30 bg-[#0B1122] p-4 shadow-glow-lime-soft">
             <div className="flex items-start justify-between">
               <div>
                 <div className="text-sm text-ink-300">Current Streak</div>
@@ -90,7 +90,7 @@ export default function History() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4 divide-y divide-ink-700/60">
+          <div className="mt-3 rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4 divide-y divide-ink-700/60">
             <Row
               label="Best Streak"
               value={`${streak.longest} days`}
@@ -121,7 +121,7 @@ export default function History() {
             </span>
           }
         >
-          <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4">
+          <div className="rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4">
             <div className="grid grid-cols-7 gap-2 text-center">
               {DOW_LABEL.map((d) => (
                 <div
@@ -150,7 +150,11 @@ export default function History() {
             </div>
             <div className="mt-4 flex justify-center gap-5 text-xs text-ink-300">
               <Legend variant="solid" color="bg-lime-400" label="Goal Met" />
-              <Legend variant="solid" color="bg-ink-700 border border-ink-500/40" label="Rest Day" />
+              <Legend
+                variant="solid"
+                color="bg-ink-700 border border-ink-500/40"
+                label="Rest Day"
+              />
               <Legend variant="dashed" label="Upcoming" />
             </div>
           </div>
@@ -173,7 +177,7 @@ export default function History() {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-3 flex items-center gap-3"
+                  className="rounded-2xl bg-[#0B1122] border border-ink-700/60 p-3 flex items-center gap-3"
                 >
                   <div
                     className={`size-12 rounded-xl grid place-items-center shrink-0 ${

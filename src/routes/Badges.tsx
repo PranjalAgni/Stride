@@ -76,7 +76,7 @@ export default function Badges() {
         </div>
 
         {/* Total unlocked summary */}
-        <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4 flex items-center justify-between">
+        <div className="rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4 flex items-center justify-between">
           <div>
             <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">
               TOTAL UNLOCKED
@@ -183,12 +183,8 @@ function UnlockedCard({
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative rounded-2xl bg-ink-800/70 border p-4 flex items-start gap-3 ${TIER_BORDER[def.tier]}`}
+      className={`relative rounded-2xl bg-[#0B1122] border p-4 flex items-start gap-3 ${TIER_BORDER[def.tier]}`}
     >
-      <div
-        className="absolute left-0 top-3 bottom-3 w-1 rounded-r bg-current opacity-70"
-        style={{ color: 'currentColor' }}
-      />
       <div
         className={`size-12 rounded-xl border ${TIER_BORDER[def.tier]} bg-ink-900/60 grid place-items-center shrink-0 ${TIER_COLOR[def.tier]}`}
       >
@@ -216,7 +212,7 @@ function LockedCard({ status }: { status: BadgeStatus }) {
   const Icon = iconFor(def);
   const pct = Math.min(1, def.threshold === 0 ? 0 : current / def.threshold);
   return (
-    <div className="rounded-2xl bg-ink-800/40 border border-ink-700/40 p-4 flex flex-col items-center text-center">
+    <div className="rounded-2xl bg-[#0B1122] border border-ink-700/40 p-4 flex flex-col items-center text-center">
       <div className="size-12 rounded-full bg-ink-900/60 grid place-items-center text-ink-500 mb-3">
         <Icon className="size-6" strokeWidth={2} />
       </div>
@@ -239,7 +235,7 @@ function LockedCard({ status }: { status: BadgeStatus }) {
 
 function EmptyHint({ label }: { label: string }) {
   return (
-    <div className="rounded-2xl bg-ink-800/40 border border-dashed border-ink-700/60 p-4 text-sm text-ink-300 text-center">
+    <div className="rounded-2xl bg-[#0B1122] border border-dashed border-ink-700/60 p-4 text-sm text-ink-300 text-center">
       {label}
     </div>
   );

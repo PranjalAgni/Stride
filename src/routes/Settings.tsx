@@ -41,7 +41,7 @@ export default function Settings() {
       <div className="px-5 pt-5 space-y-6">
         {/* Profile */}
         <Section icon={User} title="Profile">
-          <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4 flex items-center gap-4">
+          <div className="rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4 flex items-center gap-4">
             <div className="relative shrink-0">
               <RetroAvatar size={68} />
               <button
@@ -103,7 +103,7 @@ export default function Settings() {
 
         {/* Goal Settings */}
         <Section icon={Target} title="Goal Settings">
-          <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4">
+          <div className="rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4">
             <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">DAILY STEP GOAL</div>
             <div className="flex items-baseline justify-between mt-1">
               <span className="text-4xl font-extrabold tabular-nums text-ice-100">
@@ -138,7 +138,7 @@ export default function Settings() {
 
         {/* Preferences */}
         <Section icon={Sliders} title="Preferences">
-          <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 px-4">
+          <div className="rounded-2xl bg-[#0B1122] border border-ink-700/60 px-4">
             <ToggleRow
               icon={Bell}
               title="Smart Notifications"

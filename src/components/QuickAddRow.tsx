@@ -23,7 +23,7 @@ export function QuickAddRow({ onAdd, onSetSteps }: Props) {
       <div className="text-xs font-bold tracking-[0.2em] text-ink-300 mb-3">
         QUICK LOG
       </div>
-      <div className="grid grid-cols-3 gap-3 bg-[#0B1122]">
+      <div className="grid grid-cols-3 gap-3">
         <PresetTile amount={500} onClick={() => onAdd(500)} />
         <PresetTile amount={1000} onClick={() => onAdd(1000)} />
         <motion.button
@@ -97,7 +97,7 @@ function PresetTile({
       whileTap={{ scale: 0.96 }}
       onClick={onClick}
       aria-label={`Add ${amount} steps`}
-      className="h-16 rounded-sm bg-ink-800/70 border border-ink-700/60 flex flex-col items-center justify-center gap-0.5 text-ice-100 hover:border-lime-400/40 transition-colors"
+      className="h-16 rounded-sm bg-ink-800/70 border border-ink-700/60 flex flex-col items-center justify-center gap-0.5 text-ice-100 hover:border-lime-400/40 transition-colors bg-[#0B1122]"
     >
       <Plus className="size-4" strokeWidth={2} />
       <span className="text-sm font-bold tabular-nums">{fmt(amount)}</span>
