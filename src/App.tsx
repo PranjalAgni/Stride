@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import Today from './routes/Today';
+import Dashboard from './routes/Dashboard';
 import History from './routes/History';
-import Stats from './routes/Stats';
+import Badges from './routes/Badges';
 import Settings from './routes/Settings';
 import { BottomTabs } from './components/BottomTabs';
 import { useTheme } from './hooks/useTheme';
@@ -19,9 +19,9 @@ function AnimatedRoutes() {
         transition={{ type: 'spring', stiffness: 260, damping: 24 }}
       >
         <Routes location={location}>
-          <Route path="/" element={<Today />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/history" element={<History />} />
-          <Route path="/stats" element={<Stats />} />
+          <Route path="/badges" element={<Badges />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </motion.div>

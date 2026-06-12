@@ -1,5 +1,5 @@
 {
-  "name": "dailysteps",
+  "name": "stride",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -18,8 +18,7 @@
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router-dom": "^7.17.0",
-    "recharts": "^3.8.1"
+    "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

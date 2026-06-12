@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Header } from '../components/Header';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useSettings } from '../hooks/useSettings';
 import { useEntries } from '../hooks/useEntries';
@@ -13,58 +14,66 @@ export default function Settings() {
   const today = todayISO();
 
   return (
-    <div className="px-5 pt-8 space-y-5">
-      <div className="rounded-3xl bg-white/70 dark:bg-ink-900/60 backdrop-blur p-4">
-        <label className="text-xs opacity-60">Daily goal</label>
-        <input
-          type="number"
-          inputMode="numeric"
-          value={settings.goal}
-          onChange={(e) => update({ goal: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-          className="w-full bg-transparent text-2xl font-semibold tabular-nums outline-none"
-        />
-        {goalError && <div className="text-xs text-peach-500 mt-1">{goalError}</div>}
-      </div>
+    <div className="pb-6">
+      <Header />
+      <div className="px-5 pt-4 space-y-4">
+        <h1 className="text-2xl font-extrabold text-ice-100">Settings</h1>
 
-      <div className="rounded-3xl bg-white/70 dark:bg-ink-900/60 backdrop-blur p-4">
-        <label className="text-xs opacity-60">Challenge start date</label>
-        <input
-          type="date"
-          value={settings.startDate}
-          max={today}
-          onChange={(e) => update({ startDate: e.target.value })}
-          className="w-full bg-transparent text-base outline-none"
-        />
-      </div>
-
-      <div className="rounded-3xl bg-white/70 dark:bg-ink-900/60 backdrop-blur p-4">
-        <label className="text-xs opacity-60">Theme</label>
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {(['light','dark','system'] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => update({ theme: t })}
-              className={`rounded-2xl py-2 capitalize ${
-                settings.theme === t ? 'bg-mint-400 text-white' : 'bg-ink-50 dark:bg-ink-950'
-              }`}
-            >{t}</button>
-          ))}
+        <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4">
+          <label className="text-[10px] font-bold tracking-[0.2em] text-ink-300">DAILY GOAL</label>
+          <input
+            type="number"
+            inputMode="numeric"
+            value={settings.goal}
+            onChange={(e) => update({ goal: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+            className="w-full bg-transparent text-2xl font-extrabold tabular-nums text-ice-100 outline-none mt-1"
+          />
+          {goalError && <div className="text-xs text-lime-400 mt-1">{goalError}</div>}
         </div>
+
+        <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4">
+          <label className="text-[10px] font-bold tracking-[0.2em] text-ink-300">CHALLENGE START DATE</label>
+          <input
+            type="date"
+            value={settings.startDate}
+            max={today}
+            onChange={(e) => update({ startDate: e.target.value })}
+            className="w-full bg-transparent text-base text-ice-100 outline-none mt-1"
+            style={{ colorScheme: 'dark' }}
+          />
+        </div>
+
+        <div className="rounded-2xl bg-ink-800/70 border border-ink-700/60 p-4">
+          <label className="text-[10px] font-bold tracking-[0.2em] text-ink-300">THEME</label>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {(['light','dark','system'] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => update({ theme: t })}
+                className={`rounded-xl py-2 capitalize text-sm font-semibold transition-colors ${
+                  settings.theme === t
+                    ? 'bg-lime-400 text-ink-900'
+                    : 'bg-ink-900 border border-ink-700/60 text-ink-300'
+                }`}
+              >{t}</button>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={() => setConfirmReset(true)}
+          className="w-full rounded-2xl bg-ink-800/70 border border-red-500/30 text-red-400 py-3 font-bold"
+        >Reset all data</button>
+
+        <ConfirmDialog
+          open={confirmReset}
+          title="Reset all data?"
+          body="This will delete all logged steps and unlock history. This cannot be undone."
+          confirmLabel="Yes, reset"
+          onConfirm={() => { clearAll(); localStorage.removeItem('dailysteps:meta'); setConfirmReset(false); }}
+          onCancel={() => setConfirmReset(false)}
+        />
       </div>
-
-      <button
-        onClick={() => setConfirmReset(true)}
-        className="w-full rounded-3xl bg-peach-100 text-peach-500 py-3 font-semibold"
-      >Reset all data</button>
-
-      <ConfirmDialog
-        open={confirmReset}
-        title="Reset all data?"
-        body="This will delete all logged steps and unlock history. This cannot be undone."
-        confirmLabel="Yes, reset"
-        onConfirm={() => { clearAll(); localStorage.removeItem('dailysteps:meta'); setConfirmReset(false); }}
-        onCancel={() => setConfirmReset(false)}
-      />
     </div>
   );
 }

@@ -11,12 +11,12 @@ type Props = {
   onPick: (iso: string) => void;
 };
 
-function pctClass(pct: number): string {
-  if (pct >= 1)    return 'bg-mint-500 text-white';
-  if (pct >= 0.75) return 'bg-mint-300';
-  if (pct >= 0.5)  return 'bg-mint-200';
-  if (pct >= 0.25) return 'bg-mint-100';
-  return 'bg-white/60 dark:bg-ink-900/40';
+function pctClasses(pct: number): string {
+  if (pct >= 1)    return 'bg-lime-400 text-ink-900 shadow-glow-lime-soft';
+  if (pct >= 0.75) return 'bg-lime-400/70 text-ink-900';
+  if (pct >= 0.5)  return 'bg-lime-400/40 text-ice-100';
+  if (pct >= 0.25) return 'bg-lime-400/20 text-ice-100';
+  return 'bg-ink-800/70 text-ink-300';
 }
 
 const DOW = ['S','M','T','W','T','F','S'];
@@ -25,10 +25,10 @@ export function Heatmap({ year, monthIndex0, goal, entries, startDate, today, on
   const cells = monthGrid(year, monthIndex0);
   return (
     <div>
-      <div className="grid grid-cols-7 gap-1 mb-1 text-xs opacity-50 text-center">
+      <div className="grid grid-cols-7 gap-1.5 mb-2 text-[10px] font-bold tracking-widest text-ink-500 text-center">
         {DOW.map((d, i) => <div key={i}>{d}</div>)}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1.5">
         {cells.map(({ iso, inMonth }) => {
           const steps = entries[iso] ?? 0;
           const pct = steps / goal;
@@ -41,10 +41,10 @@ export function Heatmap({ year, monthIndex0, goal, entries, startDate, today, on
               whileTap={{ scale: 0.94 }}
               onClick={() => onPick(iso)}
               className={[
-                'aspect-square rounded-xl text-xs flex items-center justify-center font-medium',
-                inMonth ? '' : 'opacity-30',
-                before ? 'opacity-30' : pctClass(pct),
-                isToday ? 'ring-2 ring-mint-500' : '',
+                'aspect-square rounded-xl text-xs font-semibold flex items-center justify-center border border-ink-800/50',
+                inMonth ? '' : 'opacity-25',
+                before ? 'opacity-30 bg-ink-800/40 text-ink-500 border-transparent' : pctClasses(pct),
+                isToday ? 'ring-2 ring-lime-400' : '',
               ].join(' ')}
             >
               {dayNum}

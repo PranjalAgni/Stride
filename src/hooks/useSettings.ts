@@ -11,7 +11,7 @@ export type Settings = {
 const KEY = 'dailysteps:settings';
 
 export function defaultSettings(): Settings {
-  return { goal: 7500, startDate: todayISO(), theme: 'system' };
+  return { goal: 7500, startDate: todayISO(), theme: 'dark' };
 }
 
 export function useSettings() {

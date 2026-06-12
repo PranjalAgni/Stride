@@ -1,24 +1,95 @@
-import { motion } from 'framer-motion';
-
-const PRESETS = [100, 500, 1000, 2000] as const;
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Pencil, Check, X } from 'lucide-react';
 
 type Props = { onAdd: (n: number) => void };
 
 const fmt = (n: number) => n.toLocaleString();
 
 export function QuickAddRow({ onAdd }: Props) {
+  const [customOpen, setCustomOpen] = useState(false);
+  const [value, setValue] = useState('');
+
+  const submitCustom = () => {
+    const n = parseInt(value, 10);
+    if (!Number.isFinite(n) || n === 0) return;
+    onAdd(n);
+    setValue('');
+    setCustomOpen(false);
+  };
+
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {PRESETS.map(n => (
+    <div>
+      <div className="text-xs font-bold tracking-[0.2em] text-ink-300 mb-3">QUICK LOG</div>
+      <div className="grid grid-cols-3 gap-3">
+        <PresetTile amount={500} onClick={() => onAdd(500)} />
+        <PresetTile amount={1000} onClick={() => onAdd(1000)} />
         <motion.button
-          key={n}
-          whileTap={{ scale: 0.94 }}
-          onClick={() => onAdd(n)}
-          className="rounded-2xl bg-white/70 dark:bg-ink-900/60 backdrop-blur py-3 font-semibold shadow-sm hover:shadow active:shadow-inner"
+          whileTap={{ scale: 0.96 }}
+          onClick={() => setCustomOpen(o => !o)}
+          aria-label="Custom amount"
+          className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors ${
+            customOpen
+              ? 'bg-lime-400 text-ink-900'
+              : 'bg-ice-100 text-ink-900 shadow-glow-lime-soft'
+          }`}
         >
-          +{fmt(n)}
+          <Pencil className="size-5" strokeWidth={2.5} />
+          <span className="text-xs font-bold tracking-wider">CUSTOM</span>
         </motion.button>
-      ))}
+      </div>
+
+      <AnimatePresence>
+        {customOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex gap-2">
+              <input
+                autoFocus
+                type="number"
+                inputMode="numeric"
+                placeholder="Enter steps"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && submitCustom()}
+                className="flex-1 rounded-2xl bg-ink-800 border border-ink-700/60 px-4 py-3 text-ice-100 placeholder:text-ink-500 outline-none focus:border-lime-400/60"
+              />
+              <button
+                onClick={submitCustom}
+                className="rounded-2xl bg-lime-400 text-ink-900 px-4 grid place-items-center"
+                aria-label="Add custom"
+              >
+                <Check className="size-5" strokeWidth={3} />
+              </button>
+              <button
+                onClick={() => { setCustomOpen(false); setValue(''); }}
+                className="rounded-2xl bg-ink-800 border border-ink-700/60 px-3 grid place-items-center text-ink-300"
+                aria-label="Cancel"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+function PresetTile({ amount, onClick }: { amount: number; onClick: () => void }) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      onClick={onClick}
+      aria-label={`Add ${amount} steps`}
+      className="aspect-square rounded-2xl bg-ink-800/70 border border-ink-700/60 flex flex-col items-center justify-center gap-1 text-ice-100 hover:border-lime-400/40 transition-colors"
+    >
+      <Plus className="size-7" strokeWidth={2} />
+      <span className="text-base font-bold tabular-nums">{fmt(amount)}</span>
+    </motion.button>
   );
 }
