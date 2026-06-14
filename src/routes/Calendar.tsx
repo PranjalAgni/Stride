@@ -250,6 +250,7 @@ export default function Calendar() {
 
         {selectedIso ? (
           <SelectedDayCard
+            key={selectedIso}
             iso={selectedIso}
             steps={entries[selectedIso] ?? 0}
             goal={settings.goal}
