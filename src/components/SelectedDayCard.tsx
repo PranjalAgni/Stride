@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { fromISO } from '../lib/dates';
 
@@ -27,6 +28,12 @@ function status(steps: number, goal: number): Status {
   return { label: 'Missed', color: 'text-red-400' };
 }
 
+function parseDraft(raw: string): number {
+  const n = parseInt(raw, 10);
+  if (Number.isNaN(n)) return 0;
+  return Math.max(0, n);
+}
+
 type Props = {
   iso: string;
   steps: number;
@@ -34,8 +41,24 @@ type Props = {
   onSave: (iso: string, n: number) => void;
 };
 
-export function SelectedDayCard({ iso, steps, goal, onSave: _onSave }: Props) {
+export function SelectedDayCard({ iso, steps, goal, onSave }: Props) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState(String(steps));
   const s = status(steps, goal);
+
+  const enterEdit = () => {
+    setDraft(String(steps));
+    setIsEditing(true);
+  };
+  const cancel = () => {
+    setDraft(String(steps));
+    setIsEditing(false);
+  };
+  const save = () => {
+    onSave(iso, parseDraft(draft));
+    setIsEditing(false);
+  };
+
   return (
     <div>
       <div className="flex items-end justify-between mb-3">
@@ -49,19 +72,53 @@ export function SelectedDayCard({ iso, steps, goal, onSave: _onSave }: Props) {
           {dayOfWeek(iso)}
         </div>
         <div className="mt-2 flex items-center justify-between gap-3">
-          <div className="flex items-baseline gap-2 min-w-0">
-            <span className="text-5xl font-extrabold tabular-nums text-ice-100 truncate">
-              {steps.toLocaleString()}
-            </span>
-            <span className="text-sm text-ink-300">steps</span>
-          </div>
-          <button
-            type="button"
-            aria-label="Edit steps"
-            className="size-10 rounded-full bg-ink-900/60 border border-ink-700/60 grid place-items-center text-ice-100 hover:text-lime-400 transition-colors shrink-0"
-          >
-            <Pencil className="size-4" strokeWidth={2.25} />
-          </button>
+          {isEditing ? (
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              autoFocus
+              aria-label="Steps"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              className="w-40 bg-transparent text-5xl font-extrabold tabular-nums text-ice-100 border-b border-ink-700/60 outline-none focus:border-lime-400/60"
+            />
+          ) : (
+            <div className="flex items-baseline gap-2 min-w-0">
+              <span className="text-5xl font-extrabold tabular-nums text-ice-100 truncate">
+                {steps.toLocaleString()}
+              </span>
+              <span className="text-sm text-ink-300">steps</span>
+            </div>
+          )}
+
+          {isEditing ? (
+            <div className="flex gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={save}
+                className="rounded-2xl bg-lime-400 text-ink-900 font-bold px-4 py-2"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={cancel}
+                className="rounded-2xl bg-ink-900 border border-ink-700/60 text-ink-300 px-4 py-2"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              aria-label="Edit steps"
+              onClick={enterEdit}
+              className="size-10 rounded-full bg-ink-900/60 border border-ink-700/60 grid place-items-center text-ice-100 hover:text-lime-400 transition-colors shrink-0"
+            >
+              <Pencil className="size-4" strokeWidth={2.25} />
+            </button>
+          )}
         </div>
         <div className="mt-3 pt-3 border-t border-ink-700/60 flex items-center gap-2 text-sm">
           <span className="size-2 rounded-full bg-lime-400 shadow-[0_0_6px_rgba(212,255,58,0.6)]" />
