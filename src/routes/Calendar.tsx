@@ -192,7 +192,7 @@ export default function Calendar() {
               const restDay = !isFuture && !beforeStart && !met && steps === 0;
               const missed = !isFuture && !beforeStart && !met && steps > 0;
               const dayNum = parseInt(iso.slice(8, 10), 10);
-              const isSelectable = inMonth && !isFuture && !isToday && !beforeStart;
+              const isPastSelectableDay = inMonth && !isFuture && !beforeStart;
               const isSelected = selectedIso === iso;
 
               const cellClasses = `relative size-9 grid place-items-center rounded-xl text-base font-semibold tabular-nums ${
@@ -207,7 +207,17 @@ export default function Calendar() {
 
               return (
                 <div key={iso} className="flex flex-col items-center gap-1.5">
-                  {isSelectable ? (
+                  {isToday ? (
+                    <button
+                      type="button"
+                      aria-label="Clear selection"
+                      onClick={() => setSelectedIso(null)}
+                      className={cellClasses}
+                    >
+                      {dayNum}
+                      <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-ice-300 shadow-[0_0_6px_rgba(143,200,255,0.8)]" />
+                    </button>
+                  ) : isPastSelectableDay ? (
                     <button
                       type="button"
                       aria-label={`Select ${iso}`}
@@ -220,12 +230,7 @@ export default function Calendar() {
                       {dayNum}
                     </button>
                   ) : (
-                    <div className={cellClasses}>
-                      {dayNum}
-                      {isToday && (
-                        <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-ice-300 shadow-[0_0_6px_rgba(143,200,255,0.8)]" />
-                      )}
-                    </div>
+                    <div className={cellClasses}>{dayNum}</div>
                   )}
                   <DayDot
                     inMonth={inMonth}
