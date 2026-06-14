@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEntries } from '../hooks/useEntries';
 import { useSettings } from '../hooks/useSettings';
 import { useStreak } from '../hooks/useStreak';
+import { SelectedDayCard } from '../components/SelectedDayCard';
 import { fromISO, monthGrid, toISO, todayISO } from '../lib/dates';
 
 const DOW = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -47,7 +48,7 @@ export default function Calendar() {
   const navigate = useNavigate();
   const today = todayISO();
   const todayDate = fromISO(today);
-  const { entries } = useEntries();
+  const { entries, setSteps } = useEntries();
   const { settings } = useSettings();
   const streak = useStreak(entries, today);
 
@@ -247,50 +248,58 @@ export default function Calendar() {
           <LegendItem variant="missed" label="Missed" />
         </div>
 
-        {/* Monthly Stats */}
-        <div>
-          <h2 className="text-2xl font-extrabold text-ice-100 mb-3">
-            Monthly Stats
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            <StatCard
-              label="TOTAL STEPS"
-              value={fmt(stats.total)}
-              footer={
-                stats.pctVsPrev !== null ? (
-                  <span className="text-lime-400 font-semibold">
-                    {stats.pctVsPrev >= 0 ? '+' : ''}
-                    {stats.pctVsPrev}% vs {stats.prevMonthShort}
-                  </span>
-                ) : null
-              }
-            />
-            <StatCard
-              label="AVG STEPS"
-              value={fmt(stats.avg)}
-              footer={
-                stats.avg >= settings.goal ? (
-                  <span className="text-lime-400 font-semibold">
-                    Above goal
-                  </span>
-                ) : (
-                  <span className="text-ink-300 font-semibold">
-                    Goal: {fmt(settings.goal)}
-                  </span>
-                )
-              }
-            />
-          </div>
+        {selectedIso ? (
+          <SelectedDayCard
+            iso={selectedIso}
+            steps={entries[selectedIso] ?? 0}
+            goal={settings.goal}
+            onSave={setSteps}
+          />
+        ) : (
+          <div>
+            <h2 className="text-2xl font-extrabold text-ice-100 mb-3">
+              Monthly Stats
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              <StatCard
+                label="TOTAL STEPS"
+                value={fmt(stats.total)}
+                footer={
+                  stats.pctVsPrev !== null ? (
+                    <span className="text-lime-400 font-semibold">
+                      {stats.pctVsPrev >= 0 ? '+' : ''}
+                      {stats.pctVsPrev}% vs {stats.prevMonthShort}
+                    </span>
+                  ) : null
+                }
+              />
+              <StatCard
+                label="AVG STEPS"
+                value={fmt(stats.avg)}
+                footer={
+                  stats.avg >= settings.goal ? (
+                    <span className="text-lime-400 font-semibold">
+                      Above goal
+                    </span>
+                  ) : (
+                    <span className="text-ink-300 font-semibold">
+                      Goal: {fmt(settings.goal)}
+                    </span>
+                  )
+                }
+              />
+            </div>
 
-          <div className="mt-3 rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4">
-            <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">
-              DAYS GOAL MET
-            </div>
-            <div className="mt-1 text-4xl font-extrabold text-ice-100 tabular-nums">
-              {stats.goalMet} / {stats.daysCounted} Days
+            <div className="mt-3 rounded-2xl bg-[#0B1122] border border-ink-700/60 p-4">
+              <div className="text-[10px] font-bold tracking-[0.2em] text-ink-300">
+                DAYS GOAL MET
+              </div>
+              <div className="mt-1 text-4xl font-extrabold text-ice-100 tabular-nums">
+                {stats.goalMet} / {stats.daysCounted} Days
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
