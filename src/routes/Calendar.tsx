@@ -47,7 +47,8 @@ export default function Calendar() {
   const navigate = useNavigate();
   const today = todayISO();
   const todayDate = fromISO(today);
-  const { entries } = useEntries();
+  const entriesHook = useEntries();
+  const { entries } = entriesHook;
   const { settings } = useSettings();
   const streak = useStreak(entries, today);
 
@@ -55,6 +56,7 @@ export default function Calendar() {
     year: todayDate.getFullYear(),
     monthIndex: todayDate.getMonth(),
   });
+  const [selectedIso, setSelectedIso] = useState<string | null>(null);
 
   const cells = useMemo(
     () => monthGrid(view.year, view.monthIndex),
@@ -109,16 +111,20 @@ export default function Calendar() {
     };
   }, [cells, entries, settings.goal, settings.startDate, today, view]);
 
-  const goPrevMonth = () =>
+  const goPrevMonth = () => {
+    setSelectedIso(null);
     setView((v) => {
       const d = new Date(v.year, v.monthIndex - 1, 1);
       return { year: d.getFullYear(), monthIndex: d.getMonth() };
     });
-  const goNextMonth = () =>
+  };
+  const goNextMonth = () => {
+    setSelectedIso(null);
     setView((v) => {
       const d = new Date(v.year, v.monthIndex + 1, 1);
       return { year: d.getFullYear(), monthIndex: d.getMonth() };
     });
+  };
 
   return (
     <div className="pb-6">
@@ -186,25 +192,41 @@ export default function Calendar() {
               const restDay = !isFuture && !beforeStart && !met && steps === 0;
               const missed = !isFuture && !beforeStart && !met && steps > 0;
               const dayNum = parseInt(iso.slice(8, 10), 10);
+              const isSelectable = inMonth && !isFuture && !isToday && !beforeStart;
+              const isSelected = selectedIso === iso;
+
+              const cellClasses = `relative size-9 grid place-items-center rounded-xl text-base font-semibold tabular-nums ${
+                isToday || isSelected
+                  ? 'bg-ink-900/80 border border-ice-300/70 text-ice-100 shadow-[0_0_10px_rgba(143,200,255,0.35)]'
+                  : ''
+              } ${
+                !inMonth || isFuture || beforeStart
+                  ? 'text-ink-500'
+                  : 'text-ice-100'
+              }`;
 
               return (
                 <div key={iso} className="flex flex-col items-center gap-1.5">
-                  <div
-                    className={`relative size-9 grid place-items-center rounded-xl text-base font-semibold tabular-nums ${
-                      isToday
-                        ? 'bg-ink-900/80 border border-ice-300/70 text-ice-100 shadow-[0_0_10px_rgba(143,200,255,0.35)]'
-                        : ''
-                    } ${
-                      !inMonth || isFuture || beforeStart
-                        ? 'text-ink-500'
-                        : 'text-ice-100'
-                    }`}
-                  >
-                    {dayNum}
-                    {isToday && (
-                      <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-ice-300 shadow-[0_0_6px_rgba(143,200,255,0.8)]" />
-                    )}
-                  </div>
+                  {isSelectable ? (
+                    <button
+                      type="button"
+                      aria-label={`Select ${iso}`}
+                      aria-pressed={isSelected}
+                      onClick={() =>
+                        setSelectedIso((cur) => (cur === iso ? null : iso))
+                      }
+                      className={cellClasses}
+                    >
+                      {dayNum}
+                    </button>
+                  ) : (
+                    <div className={cellClasses}>
+                      {dayNum}
+                      {isToday && (
+                        <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-ice-300 shadow-[0_0_6px_rgba(143,200,255,0.8)]" />
+                      )}
+                    </div>
+                  )}
                   <DayDot
                     inMonth={inMonth}
                     isFuture={isFuture}
