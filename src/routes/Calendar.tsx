@@ -192,7 +192,8 @@ export default function Calendar() {
               const restDay = !isFuture && !beforeStart && !met && steps === 0;
               const missed = !isFuture && !beforeStart && !met && steps > 0;
               const dayNum = parseInt(iso.slice(8, 10), 10);
-              const isPastSelectableDay = inMonth && !isFuture && !beforeStart;
+              const isPastDay =
+                inMonth && !isToday && !isFuture && !beforeStart;
               const isSelected = selectedIso === iso;
 
               const cellClasses = `relative size-9 grid place-items-center rounded-xl text-base font-semibold tabular-nums ${
@@ -217,7 +218,7 @@ export default function Calendar() {
                       {dayNum}
                       <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-ice-300 shadow-[0_0_6px_rgba(143,200,255,0.8)]" />
                     </button>
-                  ) : isPastSelectableDay ? (
+                  ) : isPastDay ? (
                     <button
                       type="button"
                       aria-label={`Select ${iso}`}
