@@ -47,8 +47,7 @@ export default function Calendar() {
   const navigate = useNavigate();
   const today = todayISO();
   const todayDate = fromISO(today);
-  const entriesHook = useEntries();
-  const { entries } = entriesHook;
+  const { entries } = useEntries();
   const { settings } = useSettings();
   const streak = useStreak(entries, today);
 
