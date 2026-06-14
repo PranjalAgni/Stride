@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pencil } from 'lucide-react';
+import { Check, Pencil, X } from 'lucide-react';
 import { fromISO } from '../lib/dates';
 
 const MONTHS_SHORT = [
@@ -96,17 +96,19 @@ export function SelectedDayCard({ iso, steps, goal, onSave }: Props) {
             <div className="flex gap-2 shrink-0">
               <button
                 type="button"
+                aria-label="Save"
                 onClick={save}
-                className="rounded-2xl bg-lime-400 text-ink-900 font-bold px-4 py-2"
+                className="size-10 rounded-full bg-lime-400 text-ink-900 grid place-items-center shadow-[0_0_10px_rgba(212,255,58,0.35)] hover:bg-lime-300 transition-colors"
               >
-                Save
+                <Check className="size-5" strokeWidth={3} />
               </button>
               <button
                 type="button"
+                aria-label="Cancel"
                 onClick={cancel}
-                className="rounded-2xl bg-ink-900 border border-ink-700/60 text-ink-300 px-4 py-2"
+                className="size-10 rounded-full bg-ink-900/60 border border-ink-700/60 grid place-items-center text-ink-300 hover:text-ice-100 transition-colors"
               >
-                Cancel
+                <X className="size-5" strokeWidth={2.5} />
               </button>
             </div>
           ) : (
