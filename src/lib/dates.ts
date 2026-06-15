@@ -1,4 +1,14 @@
-import { format, parse, differenceInCalendarDays, addDays as dfAddDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
+import {
+  format,
+  parse,
+  differenceInCalendarDays,
+  addDays as dfAddDays,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+} from 'date-fns';
 
 export function todayISO(): string {
   return toISO(new Date());
@@ -27,12 +37,15 @@ export function weekStartingMonday(iso: string): string[] {
 
 export type MonthCell = { iso: string; inMonth: boolean };
 
-export function monthGrid(year: number, monthIndex0: number): MonthCell[] {
-  const first = new Date(year, monthIndex0, 1);
+export function monthGrid(year: number, monthIndex: number): MonthCell[] {
+  const first = new Date(year, monthIndex, 1);
   const start = startOfWeek(startOfMonth(first), { weekStartsOn: 0 });
   const end = endOfWeek(endOfMonth(first), { weekStartsOn: 0 });
   const days = eachDayOfInterval({ start, end });
   const cells = days.slice(0, 42);
   while (cells.length < 42) cells.push(dfAddDays(cells[cells.length - 1], 1));
-  return cells.map(d => ({ iso: toISO(d), inMonth: d.getMonth() === monthIndex0 }));
+  return cells.map((d) => ({
+    iso: toISO(d),
+    inMonth: d.getMonth() === monthIndex,
+  }));
 }
