@@ -27,6 +27,7 @@ function formatEarned(iso: string): string {
   return `EARNED ${MONTHS_SHORT[d.getMonth()]} ${d.getDate()}`;
 }
 
+/** For now lets keep everything lime
 const TIER_COLOR: Record<BadgeTier, string> = {
   bronze: 'text-amber-400',
   silver: 'text-ink-100',
@@ -39,6 +40,21 @@ const TIER_BORDER: Record<BadgeTier, string> = {
   silver: 'border-ink-100/30',
   gold: 'border-lime-400/40',
   platinum: 'border-ice-200/40',
+};
+ */
+
+const TIER_COLOR: Record<BadgeTier, string> = {
+  bronze: 'text-lime-400',
+  silver: 'text-lime-400',
+  gold: 'text-lime-400',
+  platinum: 'text-lime-400',
+};
+
+const TIER_BORDER: Record<BadgeTier, string> = {
+  bronze: 'border-lime-400/40',
+  silver: 'border-lime-400/40',
+  gold: 'border-lime-400/40',
+  platinum: 'border-lime-400/40',
 };
 
 const TIER_NAME: Record<BadgeTier, string> = {
