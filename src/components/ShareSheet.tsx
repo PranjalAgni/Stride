@@ -1,13 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  X,
-  Camera,
-  MessageSquare,
-  Globe,
-  Upload,
-  Download,
-} from 'lucide-react';
+import { X, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
 import shareBg from '../assets/share-bg.png';
 
 const MONTHS = [
@@ -49,6 +43,9 @@ export function ShareSheet({
   steps,
   goal,
 }: ShareSheetProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -69,6 +66,26 @@ export function ShareSheet({
   const r = 22;
   const c = 2 * Math.PI * r;
   const dash = (ringPct / 100) * c;
+
+  const handleDownload = async () => {
+    if (!cardRef.current || downloading) return;
+    setDownloading(true);
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        pixelRatio: 3,
+        cacheBust: true,
+        backgroundColor: '#0B1122',
+      });
+      const link = document.createElement('a');
+      link.download = `stride-${iso}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to export share card', err);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -106,6 +123,7 @@ export function ShareSheet({
 
             <div className="rounded-3xl border border-ink-700/60 p-3 bg-black/40">
               <div
+                ref={cardRef}
                 className="relative rounded-2xl overflow-hidden aspect-[9/14] bg-cover bg-center"
                 style={{ backgroundImage: `url(${shareBg})` }}
               >
@@ -198,56 +216,18 @@ export function ShareSheet({
               </div>
             </div>
 
-            <div className="mt-6">
-              <div className="text-center text-[10px] font-bold tracking-[0.25em] text-ink-300 mb-4">
-                SHARE PROGRESS
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                <ShareTarget
-                  icon={<Camera className="size-5" />}
-                  label="STORIES"
-                />
-                <ShareTarget
-                  icon={<MessageSquare className="size-5" />}
-                  label="WHATSAPP"
-                />
-                <ShareTarget icon={<Globe className="size-5" />} label="FEED" />
-                <ShareTarget
-                  icon={<Upload className="size-5" />}
-                  label="SYSTEM"
-                />
-              </div>
-            </div>
-
             <button
               type="button"
-              className="mt-6 w-full rounded-2xl bg-ice-300 hover:bg-ice-200 transition-colors text-ink-900 font-extrabold tracking-wider py-4 flex items-center justify-center gap-2 shadow-[0_0_24px_rgba(143,200,255,0.4)]"
+              onClick={handleDownload}
+              disabled={downloading}
+              className="mt-6 w-full rounded-2xl bg-ice-300 hover:bg-ice-200 disabled:opacity-60 disabled:cursor-not-allowed transition-colors text-ink-900 font-extrabold tracking-wider py-4 flex items-center justify-center gap-2 shadow-[0_0_24px_rgba(143,200,255,0.4)]"
             >
               <Download className="size-5" strokeWidth={2.5} />
-              SAVE TO CAMERA ROLL
+              {downloading ? 'SAVING…' : 'SAVE TO CAMERA ROLL'}
             </button>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-function ShareTarget({
-  icon,
-  label,
-}: {
-  icon: React.ReactNode;
-  label: string;
-}) {
-  return (
-    <button type="button" className="flex flex-col items-center gap-2 group">
-      <span className="size-12 rounded-full bg-ink-800 border border-ink-700/60 grid place-items-center text-ice-100 group-hover:bg-ink-700 transition-colors">
-        {icon}
-      </span>
-      <span className="text-[10px] font-bold tracking-widest text-ink-300">
-        {label}
-      </span>
-    </button>
   );
 }
